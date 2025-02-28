@@ -27,21 +27,7 @@ class ImagePickerScreen extends StatefulWidget {
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
   final List<File> _images = [];
-  File? _image;
   final ImagePicker _picker = ImagePicker();
-
-  // Function to pick an image from the gallery
-  Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
 
   // Function to pick multiple images from the gallery
   Future<void> _pickImages() async {
@@ -164,61 +150,6 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     );
   }
 
-  // Widget gridView(List<File> images) {
-  //   return ReorderableGridView.builder(
-  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 2, // Number of columns
-  //       crossAxisSpacing: 20,
-  //       mainAxisSpacing: 20,
-  //       childAspectRatio: 1.0,
-  //     ),
-  //     onReorder: (oldIndex, newIndex) {
-  //       setState(() {
-  //         final item = _images.removeAt(oldIndex);
-  //         _images.insert(newIndex, item);
-  //       });
-  //     },
-  //     itemCount: images.length,
-  //     itemBuilder: (context, index) {
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.grey[300],
-  //           borderRadius: BorderRadius.circular(10),
-  //         ),
-  //         child: Stack(
-  //           children: [
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: Image.file(images[index]),
-  //             ),
-  //             Positioned(
-  //               top: 5, // Adjust this value to position correctly
-  //               right: 5, // Adjust this value to position correctly
-  //               child: Container(
-  //                 decoration: BoxDecoration(
-  //                   color: Color.fromRGBO(189, 6, 10, 0.80),
-  //                   shape: BoxShape.circle,
-  //                 ),
-  //                 width: 25, // Ensure it's a proper size for the icon
-  //                 height: 25,
-  //                 child: IconButton(
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       _images.removeAt(index);
-  //                     });
-  //                   },
-  //                   icon: Icon(Icons.close, color: Colors.white, size: 18),
-  //                   padding: EdgeInsets.zero, // Remove extra padding
-  //                   constraints: BoxConstraints(), // Remove default constraints
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
   Widget gridView(List<File> images) {
     return ReorderableGridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -279,6 +210,3 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     );
   }
 }
-// 52,163,83
-// 66,128,239
-// 229,67,53 created by Nexio Developer Group (mobile - neeche wali line me)

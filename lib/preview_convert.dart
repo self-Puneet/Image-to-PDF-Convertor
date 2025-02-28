@@ -14,7 +14,6 @@ class Convert extends StatefulWidget {
 }
 
 class _ConvertState extends State<Convert> {
-  TextEditingController _controller = TextEditingController();
   int selectedButton = 0;
   List<String> labels = ["No Margin", "Small Margin", "Big Margin"];
 
@@ -31,7 +30,7 @@ class _ConvertState extends State<Convert> {
               child: pw.Container(
                 margin: pw.EdgeInsets.all(
                   selectedButton * 5,
-                ), // Adds margin around the image
+                ),
                 child: pw.Image(image),
               ),
             );
@@ -49,153 +48,22 @@ class _ConvertState extends State<Convert> {
       return;
     }
 
-    // Ask user for file name
-    String fileName = await _askFileName(context);
-    if (fileName.isEmpty) return;
+    // Generate file name based on current timestamp
+    String fileName = "PDF_${DateTime.now().millisecondsSinceEpoch}.pdf";
 
     // Save the file in the selected directory
-    final filePath = "$selectedDirectory/$fileName.pdf";
+    final filePath = "$selectedDirectory/$fileName";
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
 
     // Show success message and open the file
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("PDF saved to: $filePath")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("PDF saved to: $filePath")),
+    );
 
     OpenFile.open(filePath);
   }
 
-  Future<String> _askFileName(BuildContext context) async {
-    TextEditingController controller = TextEditingController();
-    String fileName = "";
-
-    await showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text("Enter File Name"),
-            content: TextField(
-              controller: controller,
-              decoration: InputDecoration(hintText: "Enter PDF name"),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  fileName = controller.text.trim();
-                  Navigator.pop(context);
-                },
-                child: Text("Save"),
-              ),
-            ],
-          ),
-    );
-
-    return fileName;
-  }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     home: Scaffold(
-  //       appBar: AppBar(title: Text("Convert Images to PDF")),
-  //       body: Column(
-  //         children: [
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: List.generate(labels.length, (index) {
-  //               return Padding(
-  //                 padding: const EdgeInsets.symmetric(
-  //                   horizontal: 20.0,
-  //                   vertical: 20,
-  //                 ),
-  //                 child: ElevatedButton(
-  //                   style: ButtonStyle(
-  //                     backgroundColor: WidgetStateProperty.all(
-  //                       selectedButton == index
-  //                           ? Colors.blue
-  //                           : Colors.grey[400],
-  //                     ),
-  //                     shape: WidgetStateProperty.all(
-  //                       RoundedRectangleBorder(
-  //                         borderRadius: BorderRadius.circular(
-  //                           15,
-  //                         ), // ✅ Rounded corners
-  //                       ),
-  //                     ),
-  //                     padding: WidgetStateProperty.all(
-  //                       EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-  //                     ),
-  //                   ),
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       selectedButton = index;
-  //                     });
-  //                   },
-  //                   child: Text(
-  //                     textAlign: TextAlign.center,
-  //                     style: TextStyle(
-  //                       color:
-  //                           selectedButton == index
-  //                               ? Colors.white
-  //                               : Colors.white,
-  //                     ),
-  //                     labels[index].split(' ').join('\n'),
-  //                   ),
-  //                 ),
-  //               );
-  //             }),
-  //           ), // ✅ Fixed GridView height issue
-  //           Align(
-  //             alignment: Alignment.center,
-  //             child: Container(
-  //               padding: EdgeInsets.all(selectedButton * 5),
-  //               height: (141.4 * 4) / 2,
-  //               width: (100 * 4) / 2,
-
-  //               decoration: BoxDecoration(
-  //                 color: Colors.grey[400],
-  //                 // border: Border.all(
-  //                 //   color: Colors.black, // Border color
-  //                 //   width: 2, // Border width
-  //                 // ),
-  //               ),
-  //               child: Image.file(widget.image[0]),
-  //             ),
-  //           ),
-  //           Spacer(),
-  //           Container(
-  //             width: double.infinity, // Expands to full width
-  //             margin: EdgeInsets.symmetric(
-  //               horizontal: 20,
-  //               vertical: 10,
-  //             ), // Margin
-  //             child: ElevatedButton(
-  //               style: ButtonStyle(
-  //                 backgroundColor: WidgetStateProperty.all(Colors.blue),
-  //                 shape: WidgetStateProperty.all(
-  //                   RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(
-  //                       5,
-  //                     ), // ✅ Rounded corners
-  //                   ),
-  //                 ),
-  //                 padding: WidgetStateProperty.all(
-  //                   EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-  //                 ),
-  //               ),
-  //               onPressed: () => createPdf(context, widget.image),
-  //               child: Text(
-  //                 "Save as PDF",
-  //                 style: TextStyle(color: Colors.white, fontSize: 20),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
